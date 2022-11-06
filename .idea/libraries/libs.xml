@@ -42,6 +42,7 @@
       <root url="file://$PROJECT_DIR$/libs/lwjgl-xxhash" />
       <root url="file://$PROJECT_DIR$/libs/lwjgl-yoga" />
       <root url="file://$PROJECT_DIR$/libs/lwjgl-zstd" />
+      <root url="jar://$PROJECT_DIR$/libs/joml-1.10.5.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
