@@ -1,16 +1,34 @@
 package core;
 
+import core.utils.Consts;
+
+/*
+* NOTES
+*
+* The Launcher will handle launching all the different
+* screens
+*
+* */
+
+
 public class Launcher {
+
+    private static WindowManager window;
+    public static EngineManager engine;
     public static void main(String[] args) {
         // go to configuration -> VM Options -> VM Arguments ->  -XstartOnFirstThread
 
-        WindowManager window = new WindowManager("Sophia Screen Front", 450, 900, false);
-        window.init();
+        window = new WindowManager(Consts.FRONT_TITLE, 450, 900, false);
+        engine = new EngineManager();
 
-        while(!window.windowShouldClose()) {
-            window.update();
+        try {
+            engine.start();
+        } catch (Exception e){
+            e.printStackTrace();
         }
+    }
 
-        window.cleanup();
+    public static WindowManager getWindow(){
+        return window;
     }
 }
