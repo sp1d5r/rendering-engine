@@ -8,7 +8,15 @@ import test.TestGame;
 *
 * The Launcher will handle launching all the different
 * screens
-*
+
+----- Notes for multiple windows -----
+First, you must create every GLFW window on the "main" thread.
+You must also always invoke glfwWaitEvents/glfwPollEvents in the "main" thread.
+Other than that you are free to create any number of windows with their own render context threads.
+GLFW.glfwMakeContextCurrent(window) makes the GLFW-managed OpenGL context current in the calling thread.
+GL.createCapabilities() lets LWJGL know about a context being current in the calling thread and lets LWJGL initialize itself for OpenGL.
+You can also once create GL.createCapabilities() in any OpenGL context thread and then reuse the same returned GLCapabilities object in each other rendering thread via GL.setCapabilities(GLCapabilities).
+
 * */
 
 

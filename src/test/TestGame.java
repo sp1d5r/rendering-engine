@@ -1,9 +1,7 @@
 package test;
 
-import core.ILogic;
-import core.Launcher;
-import core.RenderManager;
-import core.WindowManager;
+import core.*;
+import core.entity.Model;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -12,16 +10,30 @@ public class TestGame implements ILogic {
     private float colour = 0.0f;
 
     private final RenderManager renderer;
+    private final ObjectLoader loader;
+    private Model model;
     private final WindowManager window;
 
     public TestGame() {
         renderer = new RenderManager();
         window =  Launcher.getWindow();
+        loader = new ObjectLoader();
     }
 
     @Override
     public void init() throws Exception {
         renderer.init();
+
+        // this is to create a simple rectangle
+        float[] vertices = {
+                -0.5f, 0.5f, 0f,
+                -0.5f, -0.5f, 0f,
+                0.5f, -0.5f, 0f,
+                0.5f, -0.5f, 0f,
+                0.5f, 0.5f, 0f,
+                -0.5f, 0.5f, 0f
+        };
+        model = loader.loadModel(vertices);
     }
 
     @Override
@@ -53,11 +65,12 @@ public class TestGame implements ILogic {
         }
 
         window.setClearColor(colour, colour, colour, 0.0f);
-        renderer.clear();
+        renderer.render(model);
     }
 
     @Override
     public void cleanup() {
         renderer.cleanup();
+        loader.cleanup();
     }
 }
