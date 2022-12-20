@@ -1,6 +1,7 @@
 package core.entity;
 
 public class Model {
+    /* Represents a model stored in memory, can be accessed by it's ID */
     private int id;
     private int vertexCount;
 
