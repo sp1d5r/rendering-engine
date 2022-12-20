@@ -1,6 +1,7 @@
 package core;
 
 import core.utils.Consts;
+import test.TestGame;
 
 /*
 * NOTES
@@ -14,12 +15,14 @@ import core.utils.Consts;
 public class Launcher {
 
     private static WindowManager window;
-    public static EngineManager engine;
+
+    private static TestGame game;
     public static void main(String[] args) {
         // go to configuration -> VM Options -> VM Arguments ->  -XstartOnFirstThread
 
         window = new WindowManager(Consts.FRONT_TITLE, 450, 900, false);
-        engine = new EngineManager();
+        game = new TestGame();
+        EngineManager engine = new EngineManager();
 
         try {
             engine.start();
@@ -31,4 +34,9 @@ public class Launcher {
     public static WindowManager getWindow(){
         return window;
     }
+
+    public static TestGame getGame() {
+        return game;
+    }
+
 }

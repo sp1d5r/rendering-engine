@@ -21,6 +21,8 @@ public class EngineManager {
     // capture any errors
     private GLFWErrorCallback errorCallback;
 
+    private ILogic gameLogic;
+
     public static int getFps() {
         return fps;
     }
@@ -32,7 +34,9 @@ public class EngineManager {
     private void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
         window = Launcher.getWindow();
+        gameLogic = Launcher.getGame();
         window.init();
+        gameLogic.init();
     }
 
     public void start() throws Exception {
@@ -58,8 +62,7 @@ public class EngineManager {
             unprocessedTime += passedTime / (double) NANO_SECOND;
             frameCounter += passedTime;
 
-            // input
-
+            input();
             while(unprocessedTime > frametime) {
                 render = true;
                 unprocessedTime -= frametime;
@@ -90,19 +93,21 @@ public class EngineManager {
     }
 
     private void input() {
-
+        gameLogic.input();
     }
 
     private void render() {
+        gameLogic.render();
         window.update();
     }
 
     private void update() {
-
+        gameLogic.update();
     }
 
     private void cleanup() {
         window.cleanup();
+        gameLogic.cleanup();
         errorCallback.free();
         GLFW.glfwTerminate();
     }

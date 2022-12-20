@@ -178,4 +178,12 @@ public class WindowManager {
         float aspectRatio = (float) width / height;
         return projectionMatrix.setPerspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
     }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 }
