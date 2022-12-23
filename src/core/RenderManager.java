@@ -1,6 +1,8 @@
 package core;
 
+import core.entity.Entity;
 import core.entity.Model;
+import core.utils.Transformation;
 import core.utils.Utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -21,22 +23,28 @@ public class RenderManager {
         // shader.createGeometryShader(Utils.loadResource("/shaders/geometry.gs"));
         shader.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
         shader.link();
+
+        // You can only access uniforms after the shader has been linked.
+        shader.createUniform("transformationMatrix");
     }
 
-    public void render(Model model) {
+    public void render(Entity entity) {
         clear();
         shader.bind();
+//        shader.setUniform("textureSampler", 0);
+        shader.setUniform("transformationMatrix", Transformation.createTransformationMatrix(entity));
+
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-        GL30.glBindVertexArray(model.getId());
+        GL30.glBindVertexArray(entity.getModel().getId());
         GL20.glEnableVertexAttribArray(0); // Vertex Positions
-        if (model.usesTexture){
+        if (entity.getModel().usesTexture){
             GL20.glEnableVertexAttribArray(1); // Vertex Textures
             GL13.glActiveTexture(GL13.GL_TEXTURE);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
-            GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModel().getTexture().getId());
+            GL11.glDrawElements(GL11.GL_TRIANGLES, entity.getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
             GL20.glDisableVertexAttribArray(1);
         } else {
-            GL11.glDrawArrays(GL11.GL_TRIANGLES, 0,model.getVertexCount());
+            GL11.glDrawArrays(GL11.GL_TRIANGLES, 0,entity.getModel().getVertexCount());
         }
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);

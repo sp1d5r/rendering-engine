@@ -1,7 +1,9 @@
 package test;
 
 import core.*;
+import core.entity.Entity;
 import core.entity.Model;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -11,7 +13,7 @@ public class TestGame implements ILogic {
 
     private final RenderManager renderer;
     private final ObjectLoader loader;
-    private Model model;
+    private Entity entity;
     private final WindowManager window;
 
     public TestGame() {
@@ -41,7 +43,8 @@ public class TestGame implements ILogic {
                 3, 1, 2
         };
 
-        model = loader.loadModel(vertices, textureCords, indices);
+        Model model = loader.loadModel(vertices, textureCords, indices);
+        entity = new Entity(model, new Vector3f(1,0,0), new Vector3f(0, 0,0), 1);
     }
 
     @Override
@@ -63,6 +66,10 @@ public class TestGame implements ILogic {
             colour = 1.0f;
         else if (colour <= 0)
             colour = 0.0f;
+
+        if (entity.getPos().x < -1.5f)
+            entity.getPos().x = 1.5f;
+        entity.getPos().x -= 0.01f;
     }
 
     @Override
@@ -73,7 +80,7 @@ public class TestGame implements ILogic {
         }
 
         window.setClearColor(colour, colour, colour, 0.0f);
-        renderer.render(model);
+        renderer.render(entity);
     }
 
     @Override
