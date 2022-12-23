@@ -34,12 +34,14 @@ public class TestGame implements ILogic {
                 -0.5f, 0.5f, 0f
         };
 
+        float[] textureCords = {};
+
         int[] indices = {
                 0, 1, 3,
                 3, 1, 2
         };
 
-        model = loader.loadModel(vertices, indices);
+        model = loader.loadModel(vertices, textureCords, indices);
     }
 
     @Override

@@ -3,6 +3,7 @@ package core;
 import core.entity.Model;
 import core.utils.Utils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -27,8 +28,16 @@ public class RenderManager {
         shader.bind();
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         GL30.glBindVertexArray(model.getId());
-        GL20.glEnableVertexAttribArray(0); // data in attribute list 0
-        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
+        GL20.glEnableVertexAttribArray(0); // Vertex Positions
+        if (model.usesTexture){
+            GL20.glEnableVertexAttribArray(1); // Vertex Textures
+            GL13.glActiveTexture(GL13.GL_TEXTURE);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
+            GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+            GL20.glDisableVertexAttribArray(1);
+        } else {
+            GL11.glDrawArrays(GL11.GL_TRIANGLES, 0,model.getVertexCount());
+        }
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
         shader.unbind();
