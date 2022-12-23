@@ -1,11 +1,12 @@
 package core;
 
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL32;
 
 public class ShaderManager {
 
     private final int programID;
-    private int vertexShaderID, fragmentShaderID;
+    private int vertexShaderID, fragmentShaderID, geometryShaderID;
 
     public ShaderManager() throws Exception{
         programID = GL20.glCreateProgram();
@@ -19,6 +20,10 @@ public class ShaderManager {
 
     public void createFragmentShader(String shaderCode) throws Exception {
         fragmentShaderID = createShader(shaderCode, GL20.GL_FRAGMENT_SHADER);
+    }
+
+    public void createGeometryShader(String shaderCode) throws Exception {
+        geometryShaderID = createShader(shaderCode, GL32.GL_GEOMETRY_SHADER);
     }
 
     public int createShader(String shaderCode, int shaderType) throws Exception {
@@ -52,6 +57,9 @@ public class ShaderManager {
 
         if (fragmentShaderID != 0)
             GL20.glDetachShader(programID, fragmentShaderID);
+
+        if (geometryShaderID != 0)
+            GL20.glDetachShader(programID, geometryShaderID);
 
         GL20.glValidateProgram(programID);
 //        if (GL20.glGetProgrami(programID, GL20.GL_VALIDATE_STATUS) == 0)

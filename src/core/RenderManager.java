@@ -17,6 +17,7 @@ public class RenderManager {
     public void init() throws Exception {
         shader = new ShaderManager();
         shader.createVertexShader(Utils.loadResource("/shaders/vertex.vs"));
+        // shader.createGeometryShader(Utils.loadResource("/shaders/geometry.gs"));
         shader.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
         shader.link();
     }
@@ -24,6 +25,7 @@ public class RenderManager {
     public void render(Model model) {
         clear();
         shader.bind();
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         GL30.glBindVertexArray(model.getId());
         GL20.glEnableVertexAttribArray(0); // data in attribute list 0
         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
