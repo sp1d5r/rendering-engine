@@ -38,6 +38,8 @@ public class WindowManager {
         this.width = width;
         this.height = height;
         this.vSync = vSync;
+
+        this.projectionMatrix = new Matrix4f();
     }
 
     public void init() {
@@ -108,8 +110,10 @@ public class WindowManager {
         GL11.glClearColor(0f, 0f, 0f, 0f);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BACK);
+
+        // This will break rendering
+        //GL11.glEnable(GL11.GL_CULL_FACE);
+        //GL11.glEnable(GL11.GL_BACK);
 
     }
 

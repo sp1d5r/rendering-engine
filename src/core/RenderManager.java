@@ -26,13 +26,20 @@ public class RenderManager {
 
         // You can only access uniforms after the shader has been linked.
         shader.createUniform("transformationMatrix");
+        shader.createUniform("projectionMatrix");
+        shader.createUniform("viewMatrix");
+
+
     }
 
-    public void render(Entity entity) {
+    public void render(Entity entity, Camera camera) {
         clear();
         shader.bind();
 //        shader.setUniform("textureSampler", 0);
         shader.setUniform("transformationMatrix", Transformation.createTransformationMatrix(entity));
+        shader.setUniform("projectionMatrix", window.updateProjectionMatric());
+        shader.setUniform("viewMatrix", Transformation.getViewMatrix(camera));
+
 
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         GL30.glBindVertexArray(entity.getModel().getId());
