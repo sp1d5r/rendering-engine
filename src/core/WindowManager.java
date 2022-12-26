@@ -190,4 +190,8 @@ public class WindowManager {
     public int getWidth() {
         return width;
     }
+
+    public long getWindowHandler() {
+        return window;
+    }
 }

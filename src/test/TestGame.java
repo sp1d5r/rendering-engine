@@ -3,12 +3,13 @@ package test;
 import core.*;
 import core.entity.Entity;
 import core.entity.Model;
+import core.utils.Consts;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 public class TestGame implements ILogic {
-    private static final float CAMERA_MOVE_SPEED = 0.05f;
     private int direction = 0;
     private float colour = 0.0f;
 
@@ -17,6 +18,8 @@ public class TestGame implements ILogic {
     private Entity entity;
     private final WindowManager window;
     private Camera camera;
+
+    private String viewOption = "normal";
 
     Vector3f cameraInc;
 
@@ -59,12 +62,12 @@ public class TestGame implements ILogic {
         float[] textureCords = {};
 
         int[] indices = new int[]{
-                0, 1, 3, 3, 1, 2,
-                8, 10, 11, 9, 8, 11,
-                12, 13, 7, 5, 12, 7,
-                14, 15, 6, 4, 14, 6,
-                16, 18, 19, 17, 16, 19,
-                4, 6, 7, 5, 4, 7,
+                0,2,1,  0,3,2,
+                4,3,0,  4,7,3,
+                4,1,5,  4,0,1,
+                3,6,2,  3,7,6,
+                1,6,5,  1,2,6,
+                7,5,6,  7,4,5
         };
 
         Model model = loader.loadModel(vertices, textureCords, indices);
@@ -87,6 +90,16 @@ public class TestGame implements ILogic {
         if (window.isKeyPressed(GLFW.GLFW_KEY_D))
             cameraInc.x = 1;
 
+        if (window.isKeyPressed(GLFW.GLFW_KEY_1))
+            viewOption = "reset";
+
+        if (window.isKeyPressed(GLFW.GLFW_KEY_2))
+            viewOption = "left";
+
+        if (window.isKeyPressed(GLFW.GLFW_KEY_3))
+            viewOption = "right";
+
+
 //        if (window.isKeyPressed(GLFW.GLFW_KEY_UP)) {
 //            direction = 1;
 //        }
@@ -98,8 +111,35 @@ public class TestGame implements ILogic {
     }
 
     @Override
-    public void update() {
-        camera.movePosition(cameraInc.x * CAMERA_MOVE_SPEED, cameraInc.y * CAMERA_MOVE_SPEED, cameraInc.z * CAMERA_MOVE_SPEED);
+    public void update(float interval, MouseInput mouseInput) {
+        camera.movePosition(cameraInc.x * Consts.CAMERA_MOVE_SPEED, cameraInc.y * Consts.CAMERA_MOVE_SPEED, cameraInc.z * Consts.CAMERA_MOVE_SPEED);
+
+        if(mouseInput.isRightButtonPress()) {
+            Vector2f rotVec = mouseInput.getDisplayVec();
+            camera.moveRotation(rotVec.x * Consts.MOUSE_SENSITIVITY, rotVec.y* Consts.MOUSE_SENSITIVITY, 0);
+        }
+
+        float DIST_TO_OBJECT_Z = 5;
+        float DIST_FROM_OBJECT = 5;
+
+        if (viewOption.equals("left")){
+            camera.setRotation(0, 90, 0);
+            camera.setPosition(-DIST_FROM_OBJECT, 0, -DIST_TO_OBJECT_Z);
+            viewOption = "normal";
+        }
+
+        if (viewOption.equals("right")){
+            camera.setRotation(0, -90, 0);
+            camera.setPosition(DIST_FROM_OBJECT, 0, -DIST_TO_OBJECT_Z);
+            viewOption = "normal";
+        }
+
+        if (viewOption.equals("reset")) {
+            camera.setRotation(0, 0, 0);
+            camera.setPosition(0, 0, 0);
+            viewOption = "normal";
+        }
+
 
         // Color information
         colour += direction * 0.01f;
