@@ -9,6 +9,8 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import static core.utils.Consts.DIST_TO_OBJECT_Z;
+
 public class TestGame implements ILogic {
     private int direction = 0;
     private float colour = 0.0f;
@@ -35,43 +37,8 @@ public class TestGame implements ILogic {
     public void init() throws Exception {
         renderer.init();
 
-        // this is to create a simple cube
-        float[] vertices = new float[] {
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                -0.5f, 0.5f, -0.5f,
-                0.5f, 0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                -0.5f, 0.5f, -0.5f,
-                0.5f, 0.5f, -0.5f,
-                -0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-        };
-
-        float[] textureCords = {};
-
-        int[] indices = new int[]{
-                0,2,1,  0,3,2,
-                4,3,0,  4,7,3,
-                4,1,5,  4,0,1,
-                3,6,2,  3,7,6,
-                1,6,5,  1,2,6,
-                7,5,6,  7,4,5
-        };
-
-        Model model = loader.loadModel(vertices, textureCords, indices);
-        entity = new Entity(model, new Vector3f(0,0,-5), new Vector3f(0, 0,0), 1);
+        Model model = loader.loadMode("/models/female.obj");
+        entity = new Entity(model, new Vector3f(0,-100,-DIST_TO_OBJECT_Z), new Vector3f(0, 0,0), 1);
     }
 
     @Override
@@ -119,18 +86,16 @@ public class TestGame implements ILogic {
             camera.moveRotation(rotVec.x * Consts.MOUSE_SENSITIVITY, rotVec.y* Consts.MOUSE_SENSITIVITY, 0);
         }
 
-        float DIST_TO_OBJECT_Z = 5;
-        float DIST_FROM_OBJECT = 5;
 
         if (viewOption.equals("left")){
             camera.setRotation(0, 90, 0);
-            camera.setPosition(-DIST_FROM_OBJECT, 0, -DIST_TO_OBJECT_Z);
+            camera.setPosition(-DIST_TO_OBJECT_Z, 0, -DIST_TO_OBJECT_Z);
             viewOption = "normal";
         }
 
         if (viewOption.equals("right")){
             camera.setRotation(0, -90, 0);
-            camera.setPosition(DIST_FROM_OBJECT, 0, -DIST_TO_OBJECT_Z);
+            camera.setPosition(DIST_TO_OBJECT_Z, 0, -DIST_TO_OBJECT_Z);
             viewOption = "normal";
         }
 
